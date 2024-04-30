@@ -1,4 +1,9 @@
-;; And lets get auto-complete setup.
+
+;;;
+;;; The autocomplete package and configurations
+;;; 
+
+
 (use-package auto-complete
     :ensure t
     :config

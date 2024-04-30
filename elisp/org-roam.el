@@ -1,5 +1,8 @@
-;; ---- org-roam start
-;; which is finally why we came to org-mode in the first place.
+
+;;;
+;;; Configuration org-roam
+;;;
+
 (use-package org-roam
     :ensure t
     :custom

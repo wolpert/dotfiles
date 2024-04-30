@@ -1,8 +1,7 @@
-;;; The display settings we want
+;;; The display settings we want, including a general theme
 
-;; and make everything pretty!!
 (use-package monokai-theme
-    :ensure t)
+  :ensure t)
 (load-theme 'monokai t)
 
 

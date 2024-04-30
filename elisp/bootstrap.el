@@ -13,11 +13,16 @@
 			))
   "Files I need to load")
 
-(defun nemacs-load (file)
-  "Loads the current file"
-;;  (ignore-errors
-    (load-file (f-join "~/dotfiles/elisp" file)))
-;;  )
+(defun nemacs-load (file &optional ignore)
+  "Loads the current file. Set non-nil to ignore if you want the errors"
+  (setq full-file (f-join "~/dotfiles/elisp" file))
+  (if ignore
+      (ignore-errors
+	(load-file full-file)
+	)
+    (load-file full-file)
+    )
+  )
 
 (dolist (file nemacs-files)
-  (nemacs-load file))
+  (nemacs-load file t))

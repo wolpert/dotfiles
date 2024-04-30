@@ -1,4 +1,6 @@
 ;; Yeah, just realized we need markdown still configured... lets do that now.
+
+
 (use-package markdown-mode
     :ensure t
     :mode (("README\\.md\\'" . gfm-mode)

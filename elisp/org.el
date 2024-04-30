@@ -1,5 +1,7 @@
+;;;
+;; Configuration org mode
+;;;
 
-;; start getting org-mode going and begin agenda configuration.
 (use-package org
     :ensure t
     :bind ("A-<tab>" . pcomplete)
