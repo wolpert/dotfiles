@@ -10,6 +10,7 @@
 			"markdown.el"
 			"display.el"
 			"spellcheck.el"
+			"font.el"
 			))
   "Files I need to load")
 
@@ -17,12 +18,9 @@
   "Loads the current file. Set non-nil to ignore if you want the errors"
   (setq full-file (f-join "~/dotfiles/elisp" file))
   (if ignore
-      (ignore-errors
-	(load-file full-file)
-	)
-    (load-file full-file)
-    )
+      (ignore-errors (load-file full-file))
+    (load-file full-file))
   )
 
 (dolist (file nemacs-files)
-  (nemacs-load file t))
+  (nemacs-load file))
