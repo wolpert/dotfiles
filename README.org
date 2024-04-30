@@ -1,0 +1,3 @@
+* DotFiles
+
+These are the publicly available dotfiles I'm using.
