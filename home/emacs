@@ -1,0 +1,71 @@
+
+;; Start by setting up the packaging system
+(require 'package)
+;; Add all the places to load packages.
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t)
+(package-initialize)
+;; now lets get them auto-installed.
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package) ;; pull it all
+
+;; Start with f to get file access
+(use-package f
+    :ensure t)
+
+(defun nemacs-available? ()
+  "Return non-nil when my personal files are available"
+  (f-dir? "~/dotfiles/elisp")
+  )
+
+(when (f-dir? "~/dotfiles/elisp")
+  (load (f-join "~/dotfiles/elisp" "bootstrap.el"))
+  (print nemacs-files)
+  )
+
+;; oops, forgot to force packages to check for updates. Do that now.
+(use-package auto-package-update
+    :ensure t
+    :config
+    (setq auto-package-update-delete-old-versions t)
+    (setq auto-package-update-hide-results t)
+    (auto-package-update-maybe))
+
+;; setting up debugging support with dap-mode
+(use-package exec-path-from-shell
+    :ensure
+  :init (exec-path-from-shell-initialize))
+
+
+;; backup configuration
+;; Default and per-save backups go here:
+(setq backup-directory-alist '(("" . "~/.emacs.d/backup/per-save")))
+
+(setq vc-make-backup-files t)
+
+(setq version-control t ;; Use version numbers for backups.
+      kept-new-versions 10 ;; Number of newest versions to keep.
+      kept-old-versions 0 ;; Number of oldest versions to keep.
+      delete-old-versions t ;; Don't ask to delete excess backup versions.
+      backup-by-copying t) ;; Copy all files, don't rename them.
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(markdown-command "pandoc" t)
+ '(markdown-split-window-direction 'right)
+ '(nil nil t)
+ '(package-selected-packages
+   '(counsel pkgbuild-mode ox-gfm org-roam magit lsp-mode edit-indirect markdown-mode+ auto-complete auto-package-update zenburn-theme markdown-mode use-package)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
