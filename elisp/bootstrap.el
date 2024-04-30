@@ -11,6 +11,7 @@
 			"display.el"
 			"spellcheck.el"
 			"font.el"
+			"prog.el"
 			))
   "Files I need to load")
 
