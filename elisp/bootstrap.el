@@ -12,6 +12,7 @@
 			"spellcheck.el"
 			"font.el"
 			"prog.el"
+			"slime.el"
 			))
   "Files I need to load")
 
