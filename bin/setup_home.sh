@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Move to the correct directory, create the olddir.
 if [ ! -L $0 ]
