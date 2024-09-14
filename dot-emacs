@@ -17,11 +17,11 @@
 
 (defun nemacs-available? ()
   "Return non-nil when my personal files are available"
-  (f-dir? "~/dotfiles/elisp")
+  (f-dir? "~/elisp")
   )
 
-(when (f-dir? "~/dotfiles/elisp")
-  (load (f-join "~/dotfiles/elisp" "bootstrap.el"))
+(when (f-dir? "~/elisp")
+  (load (f-join "~/elisp" "bootstrap.el"))
   (print nemacs-files)
   )
 

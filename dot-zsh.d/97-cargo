@@ -1,0 +1,6 @@
+# vim: set ft=zsh :
+
+if [[ -d "$HOME/.cargo" ]]; then
+  export PATH=$PATH:"$HOME/.cargo/bin"
+  . $HOME/.cargo/env
+fi

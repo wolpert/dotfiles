@@ -1,0 +1,9 @@
+export PATH="$HOME/.jenv/bin:$PATH"
+if [ ! -d "$HOME/.jenv" ]
+then
+	git clone https://github.com/jenv/jenv.git ~/.jenv
+	eval "$(jenv init -)"
+	jenv enable-plugin export
+else
+	eval "$(jenv init -)"
+fi

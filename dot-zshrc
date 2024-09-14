@@ -1,0 +1,45 @@
+test -f ~/.zshrc_before && source ~/.zshrc_before
+
+# shell and globbing options
+set extended_glob
+set numeric_glob_sort
+set glob_dots
+set nomatch
+bindkey -e
+
+set autocd
+set autopushd
+
+export CDPATH=".:~"
+
+set correct
+
+# jobs
+set notify
+
+# Source a local zshrc if found (though that is better managed with profiles)
+test -f ~/.zshrc_local && source ~/.zshrc_local
+
+export PATH=$HOME/bin:$PATH
+DOT=`which dot`
+if [ -n "$DOT" ]
+then
+	export GRAPHVIZ_DOT=$DOT
+fi
+
+
+# Source all files from .zsh.d, unless they contain ~ (assumes vim temp files)
+if [ -d ~/.zsh.d ]
+then
+  for zshrc_config in ~/.zsh.d/*[^~] ; do
+  #  echo "Sourcing $zshrc_config"
+    source $zshrc_config
+  done
+fi
+fpath=(~/.zsh/completion $fpath)
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

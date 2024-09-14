@@ -7,6 +7,7 @@ These are the publicly available dotfiles I'm using.
 #+begin_src shell
   cd ~
   git clone https://github.com/wolpert/dotfiles
-  ./dotfiles/bin/setup_home.sh
+  cd dotfiles
+  make
 #+end_src
 

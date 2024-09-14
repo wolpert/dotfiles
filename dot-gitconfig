@@ -1,0 +1,5 @@
+[user]
+	email = ned.wolpert@gmail.com
+	name = Ned Wolpert
+[init]
+	defaultBranch = main
