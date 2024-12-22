@@ -1,0 +1,4 @@
+if [ -x "/usr/bin/fzf" ]
+then
+    eval "$(fzf --zsh)" # only valid for version 0.48 and up. Manual below
+fi
