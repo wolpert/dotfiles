@@ -10,10 +10,10 @@ fi
 source ~/.zplug/init.zsh
 
 # plugins
-zplug "zdharma-mirror/fast-syntax-highlighting"
+#zplug "zdharma-mirror/fast-syntax-highlighting"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
-zplug "jreese/zsh-titles", as:plugin
+#zplug "jreese/zsh-titles", as:plugin
 
 # Install packages that have not been installed yet
 if ! zplug check --verbose; then
