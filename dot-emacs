@@ -59,8 +59,7 @@
  '(markdown-command "pandoc" t)
  '(markdown-split-window-direction 'right)
  '(nil nil t)
- '(package-selected-packages
-   '(yaml-mode yaml lispy counsel pkgbuild-mode ox-gfm org-roam magit lsp-mode edit-indirect markdown-mode+ auto-complete auto-package-update zenburn-theme markdown-mode use-package)))
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

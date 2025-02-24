@@ -9,10 +9,14 @@
     :config
     (ac-config-default))
 ;; and start configuring auto-complete for org mode
-(use-package org-ac
-    :ensure t
-    :init
-    (org-ac/config-default))
+
+;; Had to disable org-ac. It was last touched 8 years ago and now just
+;; beeps a lot. :( 
+
+;(use-package org-ac
+;    :ensure t
+;    :init
+;    (org-ac/config-default))
 
 
 ;; IVY from fowler https://martinfowler.com/articles/2024-emacs-completion.html
