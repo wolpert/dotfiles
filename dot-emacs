@@ -56,14 +56,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(markdown-command "pandoc" t)
+ '(markdown-command "pandoc")
  '(markdown-split-window-direction 'right)
  '(nil nil t)
  '(package-selected-packages
    '(auto-package-update counsel dimmer exec-path-from-shell f ivy-hydra
-			 lispy markdown-mode monokai-theme org-ac
-			 org-bullets org-roam ox-gfm slime xterm-color
-			 yaml yaml-mode zenburn-theme)))
+			 lispy lsp-java lsp-mode markdown-mode
+			 monokai-theme org-ac org-bullets org-roam
+			 ox-gfm slime xterm-color yaml yaml-mode
+			 zenburn-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

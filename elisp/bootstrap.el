@@ -13,6 +13,7 @@
 			"font.el"
 			"prog.el"
 			"slime.el"
+			"lsp.el"
 			))
   "Files I need to load")
 
