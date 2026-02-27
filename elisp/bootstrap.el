@@ -14,6 +14,7 @@
 			"prog.el"
 			"slime.el"
 			"lsp.el"
+			"java-ide.el"
 			))
   "Files I need to load")
 

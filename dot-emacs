@@ -58,13 +58,16 @@
  ;; If there is more than one, they won't work right.
  '(markdown-command "pandoc")
  '(markdown-split-window-direction 'right)
- '(nil nil t)
  '(package-selected-packages
-   '(auto-package-update counsel dimmer exec-path-from-shell f ivy-hydra
-			 lispy lsp-java lsp-mode markdown-mode
-			 monokai-theme org-ac org-bullets org-roam
-			 ox-gfm slime xterm-color yaml yaml-mode
-			 zenburn-theme)))
+   '(all-the-icons auto-package-update company company-box consult
+                   counsel dimmer doom-modeline doom-themes
+                   exec-path-from-shell f flycheck hl-todo ivy-hydra
+                   lispy lsp-java lsp-mode lsp-ui magit marginalia
+                   markdown-mode monokai-theme orderless org-ac
+                   org-bullets org-roam ox-gfm projectile
+                   rainbow-delimiters slime treemacs-projectile
+                   undo-tree vertico xterm-color yaml yaml-mode
+                   yasnippet yasnippet-snippets zenburn-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

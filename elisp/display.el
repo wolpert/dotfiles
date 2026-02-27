@@ -4,6 +4,9 @@
   :ensure t)
 (load-theme 'monokai t)
 
+;; Fix face attribute warnings
+(with-eval-after-load 'monokai-theme
+  (set-face-attribute 'highlight nil :distant-foreground 'unspecified))
 
 ;; show matching parens
 (show-paren-mode 1)
