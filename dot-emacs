@@ -1,4 +1,6 @@
 
+;; elpa started needing priority setting on 2026-05-30
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 ;; Start by setting up the packaging system
 (require 'package)
 ;; Add all the places to load packages.
