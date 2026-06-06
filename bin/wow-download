@@ -15,8 +15,10 @@
 #                                                  -> 307 redirect to the CDN zip
 #
 # A project (addon) id is stable, but file ids change with every release, so the
-# current newest Retail file is looked up at run time. Re-running only fetches
-# files you don't already have (new versions get new file names).
+# current newest Retail file is looked up at run time. Each addon is downloaded
+# to a temp file, verified as a real (uncorrupted) zip, extracted into the target
+# directory, and the zip is then deleted. Re-running re-extracts and overwrites,
+# so it doubles as an updater.
 
 set -euo pipefail
 
@@ -49,7 +51,7 @@ PLUGINS=(
 die()  { echo "wow-download: $*" >&2; exit 1; }
 info() { echo "  $*"; }
 
-for tool in curl jq; do
+for tool in curl jq unzip; do
   command -v "$tool" >/dev/null 2>&1 || die "required tool '$tool' not found in PATH"
 done
 
@@ -75,7 +77,7 @@ select_file() {
 
 download_addon() {
   local slug="$1" pid="$2"
-  local list fid fname dest tmp
+  local list fid fname tmp
 
   if ! list="$(curl -fsSL -A "$UA" "$API/mods/$pid/files?pageSize=50&index=0")"; then
     info "! $slug: could not query file list (project id $pid) — skipping"
@@ -88,21 +90,31 @@ download_addon() {
     return 1
   fi
 
-  dest="$OUTDIR/$fname"
-  if [[ -f "$dest" ]]; then
-    info "= $slug: already have $fname"
-    return 0
-  fi
+  tmp="$(mktemp "${TMPDIR:-/tmp}/wow-download.XXXXXX.zip")"
 
-  tmp="$dest.part"
-  if curl -fsSL -A "$UA" -o "$tmp" "$API/mods/$pid/files/$fid/download"; then
-    mv -f "$tmp" "$dest"
-    info "+ $slug: $fname"
-  else
+  # Download the zip to a temp file.
+  if ! curl -fsSL -A "$UA" -o "$tmp" "$API/mods/$pid/files/$fid/download"; then
     rm -f "$tmp"
     info "! $slug: download failed (file id $fid) — skipping"
     return 1
   fi
+
+  # Verify it is a real, uncorrupted zip before touching the target directory.
+  if ! unzip -tqq "$tmp" >/dev/null 2>&1; then
+    rm -f "$tmp"
+    info "! $slug: downloaded file is not a valid zip ($fname) — skipping"
+    return 1
+  fi
+
+  # Extract into the target directory (overwriting any older copy), then drop the zip.
+  if ! unzip -oqq "$tmp" -d "$OUTDIR" >/dev/null 2>&1; then
+    rm -f "$tmp"
+    info "! $slug: failed to extract $fname — skipping"
+    return 1
+  fi
+
+  rm -f "$tmp"
+  info "+ $slug: extracted $fname"
 }
 
 # ---- main ------------------------------------------------------------------
