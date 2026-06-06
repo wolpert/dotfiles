@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+#
+# wow-download — download the latest Retail (mainline) build of a fixed set of
+# CurseForge WoW addons into a target directory.
+#
+#   Usage: wow-download <output-directory>
+#
+# Why this is more than a plain "curl the page": CurseForge hides the real file
+# behind a JS/Cloudflare "your download will start in 5 seconds..." page, so the
+# /download web URL can't be scraped with curl. Its *internal* API, however, is
+# reachable with an ordinary request:
+#
+#   GET  $API/mods/<projectId>/files               -> JSON list of files
+#   GET  $API/mods/<projectId>/files/<fileId>/download
+#                                                  -> 307 redirect to the CDN zip
+#
+# A project (addon) id is stable, but file ids change with every release, so the
+# current newest Retail file is looked up at run time. Re-running only fetches
+# files you don't already have (new versions get new file names).
+
+set -euo pipefail
+
+# ---- config ----------------------------------------------------------------
+
+API="https://www.curseforge.com/api/v1"
+
+# WoW game-version *type* id for Retail / mainline. Classic flavors use other
+# ids (e.g. Wrath/Cata/MoP Classic), so this is what restricts us to retail.
+RETAIL_TYPE_ID=517
+
+# Pretend to be a browser; the API is picky about a missing/!curl user agent.
+UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+
+# Addons to fetch, as "slug projectId" pairs. The project id is shown in the
+# "About Project" panel on each addon's CurseForge page.
+PLUGINS=(
+  "aca               1355260"
+  "deadly-boss-mods  3358"
+  "details           61284"
+  "tomtom            18808"
+  "better-fishing    709520"
+  "gathermate2       26120"
+  "gathermate2_data  26737"
+  "pawn              4646"
+)
+
+# ---- helpers ---------------------------------------------------------------
+
+die()  { echo "wow-download: $*" >&2; exit 1; }
+info() { echo "  $*"; }
+
+for tool in curl jq; do
+  command -v "$tool" >/dev/null 2>&1 || die "required tool '$tool' not found in PATH"
+done
+
+# Pick the best file for an addon from its files JSON (read on stdin).
+# Preference order, each within the API's newest-first ordering:
+#   1. a stable Release that supports Retail
+#   2. any approved file that supports Retail
+#   3. whatever is newest, as a last resort
+# Prints "<fileId>\t<fileName>", or nothing if the list is empty.
+select_file() {
+  jq -r --argjson t "$RETAIL_TYPE_ID" '
+    .data as $d
+    | (
+        [ $d[] | select(.status == 4 and .releaseType == 1 and (.gameVersionTypeIds | index($t))) ]
+      + [ $d[] | select(.status == 4 and (.gameVersionTypeIds | index($t))) ]
+      + $d
+      )
+    | .[0]
+    | select(. != null)
+    | "\(.id)\t\(.fileName)"
+  '
+}
+
+download_addon() {
+  local slug="$1" pid="$2"
+  local list fid fname dest tmp
+
+  if ! list="$(curl -fsSL -A "$UA" "$API/mods/$pid/files?pageSize=50&index=0")"; then
+    info "! $slug: could not query file list (project id $pid) — skipping"
+    return 1
+  fi
+
+  IFS=$'\t' read -r fid fname < <(printf '%s' "$list" | select_file)
+  if [[ -z "${fid:-}" || -z "${fname:-}" ]]; then
+    info "! $slug: no suitable Retail file found — skipping"
+    return 1
+  fi
+
+  dest="$OUTDIR/$fname"
+  if [[ -f "$dest" ]]; then
+    info "= $slug: already have $fname"
+    return 0
+  fi
+
+  tmp="$dest.part"
+  if curl -fsSL -A "$UA" -o "$tmp" "$API/mods/$pid/files/$fid/download"; then
+    mv -f "$tmp" "$dest"
+    info "+ $slug: $fname"
+  else
+    rm -f "$tmp"
+    info "! $slug: download failed (file id $fid) — skipping"
+    return 1
+  fi
+}
+
+# ---- main ------------------------------------------------------------------
+
+[[ $# -eq 1 ]] || die "usage: wow-download <output-directory>"
+OUTDIR="$1"
+mkdir -p "$OUTDIR" || die "cannot create output directory: $OUTDIR"
+
+echo "Downloading ${#PLUGINS[@]} WoW addons (Retail) into: $OUTDIR"
+
+failed=0
+for entry in "${PLUGINS[@]}"; do
+  read -r slug pid <<<"$entry"
+  download_addon "$slug" "$pid" || failed=$((failed + 1))
+done
+
+echo
+if [[ $failed -eq 0 ]]; then
+  echo "Done — all addons up to date."
+else
+  echo "Done — $failed addon(s) had problems (see above)."
+  exit 1
+fi
