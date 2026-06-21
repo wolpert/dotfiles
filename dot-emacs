@@ -22,6 +22,12 @@
   (f-dir? "~/elisp")
   )
 
+;; Pull PATH from the shell before loading bootstrap, so a GUI Emacs can
+;; find shell-installed executables (e.g. claude-agent-acp) during init.
+(use-package exec-path-from-shell
+    :ensure
+  :init (exec-path-from-shell-initialize))
+
 (when (f-dir? "~/elisp")
   (load (f-join "~/elisp" "bootstrap.el"))
   (print nemacs-files)
@@ -34,12 +40,6 @@
     (setq auto-package-update-delete-old-versions t)
     (setq auto-package-update-hide-results t)
     (auto-package-update-maybe))
-
-;; setting up debugging support with dap-mode
-(use-package exec-path-from-shell
-    :ensure
-  :init (exec-path-from-shell-initialize))
-
 
 ;; backup configuration
 ;; Default and per-save backups go here:

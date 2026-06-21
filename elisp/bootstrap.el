@@ -15,6 +15,7 @@
 			"slime.el"
 			"lsp.el"
 			"java-ide.el"
+			"claude.el"
 			))
   "Files I need to load")
 
@@ -27,4 +28,5 @@
   )
 
 (dolist (file nemacs-files)
-  (nemacs-load file))
+  ;; Load claude.el soft: a failure there shouldn't break the rest of init.
+  (nemacs-load file (string= file "claude.el")))
