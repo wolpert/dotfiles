@@ -1,3 +1,13 @@
+;;; .emacs --- Ned's Emacs init -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Loaded via ~/.emacs -> dotfiles/dot-emacs symlink.
+;;; Code:
+
+;; Raise the GC threshold during startup, then restore a sane value so
+;; init isn't interrupted by garbage collection.
+(setq gc-cons-threshold (* 256 1024 1024))
+(add-hook 'after-init-hook
+          (lambda () (setq gc-cons-threshold (* 16 1024 1024))))
 
 ;; elpa started needing priority setting on 2026-05-30
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
@@ -58,9 +68,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(markdown-command "pandoc" t)
- '(markdown-split-window-direction 'right)
- '(package-selected-packages nil))
+ '(markdown-split-window-direction 'right))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -1,7 +1,7 @@
-
-;;;
-;;; Configuration org-roam
-;;;
+;;; org-roam.el --- org-roam configuration -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Configuration org-roam.
+;;; Code:
 
 (use-package org-roam
     :ensure t
@@ -18,5 +18,7 @@
              ("C-c n c"   . org-roam-dailies-capture-today))
     :config
     (setq org-roam-dailies-directory "journal/")
-    (org-roam-setup))
+    ;; org-roam-setup is deprecated; autosync keeps the DB current.
+    (org-roam-db-autosync-mode))
 
+;;; org-roam.el ends here

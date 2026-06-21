@@ -1,3 +1,4 @@
+;;; claude.el --- agent-shell / Claude integration -*- lexical-binding: t; -*-
 ;; agent-shell talks to Claude over the external ACP bridge. Without it on
 ;; PATH the package is useless, so check first and bail with instructions
 ;; rather than loading a broken agent-shell.

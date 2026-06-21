@@ -1,4 +1,7 @@
-;;; The display settings we want, including a general theme
+;;; display.el --- Display and theme settings -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; The display settings we want, including a general theme.
+;;; Code:
 
 (use-package monokai-theme
   :ensure t)
@@ -26,3 +29,5 @@
   (dimmer-configure-hydra)
   (dimmer-configure-magit)
   (dimmer-mode t))
+
+;;; display.el ends here

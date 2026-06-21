@@ -59,8 +59,9 @@
 
 (use-package company
   :ensure t
-  :hook ((lsp-mode . company-mode)
-         (java-mode . company-mode))
+  ;; Single in-buffer completion engine, enabled everywhere (replaces the
+  ;; old auto-complete). LSP feeds it through company-capf.
+  :hook (after-init . global-company-mode)
   :config
   (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 0.1)
