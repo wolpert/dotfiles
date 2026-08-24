@@ -16,6 +16,11 @@
 ;; Add all the places to load packages.
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t)
+;; Without this, package.el refuses to upgrade built-in packages (e.g.
+;; transient) past the version bundled with Emacs, even when something
+;; like Magit requires a newer release. Must be set before package
+;; operations run so :ensure/auto-package-update can upgrade them too.
+(setq package-install-upgrade-built-in t)
 (package-initialize)
 ;; now lets get them auto-installed.
 (unless (package-installed-p 'use-package)
@@ -68,7 +73,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(markdown-split-window-direction 'right))
+ '(markdown-split-window-direction 'right)
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

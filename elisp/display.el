@@ -5,6 +5,19 @@
 
 (use-package monokai-theme
   :ensure t)
+
+;; Emacs 31's org-faces defines org-level-N as `:inherit outline-N', while
+;; monokai defines outline-N as `:inherit org-level-N'.  Emacs 31 detects the
+;; resulting cycle and aborts `load-theme' with "Face inheritance results in
+;; inheritance cycle: org-level-8".  Drop the org-level-N side of the loop
+;; before the theme loads; monokai gives those faces explicit colours anyway.
+(require 'outline)
+(require 'org-faces)
+(dotimes (i 8)
+  (face-spec-set (intern (format "org-level-%d" (1+ i)))
+                 '((t :inherit unspecified))
+                 'face-defface-spec))
+
 (load-theme 'monokai t)
 
 ;; Fix face attribute warnings
